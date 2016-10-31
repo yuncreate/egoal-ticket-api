@@ -1,0 +1,31 @@
+{
+  "name": "egoal-ticket-api",
+  "version": "1.0.0",
+  "description": "node api module for shenzhen egoal ticket system",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuncreate/egoal-ticket-api.git"
+  },
+  "keywords": [
+    "egoal",
+    "yuncreate",
+    "ticket",
+    "node",
+    "npm"
+  ],
+  "author": "mengkeys@hotmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yuncreate/egoal-ticket-api/issues"
+  },
+  "homepage": "https://github.com/yuncreate/egoal-ticket-api#readme",
+  "dependencies": {
+    "md5": "^2.2.1",
+    "request": "^2.76.0",
+    "validator": "^6.1.0"
+  }
+}
