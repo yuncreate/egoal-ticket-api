@@ -19,7 +19,7 @@ var config = {
 ## 实例化对象
 
 ```js 
-var egoal = require('egoal');
+var egoal = require('egoal-ticket-api');
 
 var ticket = new egoal(config);
 ```
