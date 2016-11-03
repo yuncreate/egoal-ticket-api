@@ -3,4 +3,4 @@
  */
 
 
-module.export = require('./egoal');
+module.exports = require('./egoal');
