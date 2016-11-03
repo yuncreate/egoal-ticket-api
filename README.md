@@ -84,7 +84,7 @@ ticket.ticketNotice(req, res, function(result){
 
 
 ## 相关链接
-##### [易高官方网站](www.egoal.com.cn)
+##### [易高官方网站](http://www.egoal.com.cn/)
 ##### [易高官方文档](https://github.com/yuncreate/egoal-ticket-api/blob/master/%E6%98%93%E9%AB%98%E7%BD%91%E4%B8%8A%E8%B4%AD%E7%A5%A8%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E(V2.1).pdf)（官方V2.1PDF手册）
 ##### [Issues列表](https://github.com/yuncreate/egoal-ticket-api/issues)
 ##### [版权声明]：本模块由[丽江云创信息技术有限公司](http://www.yuncreate.com)提供，并由[Mengkeys](http://www.mengkeys.com)负责维护。
