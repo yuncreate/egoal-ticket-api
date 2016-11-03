@@ -37,26 +37,38 @@ ticket.orderGetPdcId(function(err, result){
 ```js
 ticket.orderCreate({
     threeOrderId: '你的订单编号',
-    playDate:     '你的游玩日期',
+    playDate:     '2016-12-31',
     mobile:       '手机号',
     pdcId:        '产品1编号|产品2编号|产品3编号',
     pdcPrice:     '产品1价格|产品2价格|产品3价格',                  //以“分”为单位的价格
     pCount:       '产品1数量|产品2数量|产品3数量',
-    certNo:       '客户1身份证号码|客户2身份证号码|客户3身份证号码',
-    money:        '订单总金额'                                    //以“分”为单位的总价  
+    checkNum:     '产品1次数|产品2次数|产品3次数',                                           //每张票的可检票次数
+    certNo:       '客户1身份证号码|客户2身份证号码|客户3身份证号码',   //可选，可以为空
+    money:        '订单总金额',                                   //以“分”为单位的总价  
+    localPay:     '0|1'                                         // 可现场支付填“1”
 }, function(err, result){
     console.log(err || result);
 });
 ```
 
-## 订单状态接口
+## 订单(门票)状态接口
 
 ```js
 ticket.orderGetInfo('你自己系统的订单编号', function(err, result){
     console.log(err || result);
 });
 
-ticket.orderGetInfo({threeOrderId:"你自己系统的订单编号"}, function(err, result){
+ticket.orderGetInfo({
+    threeOrderId:"你自己系统的订单编号"
+}, function(err, result){
+    console.log(err || result);
+});
+
+ticket.orderGetInfo({
+    threeOrderId:"你自己系统的订单编号",
+    orderId: "易高系统订单编号",
+    ticketCode:"票号"
+}, function(err, result){
     console.log(err || result);
 });
 ```
@@ -79,6 +91,18 @@ ticket.orderCancel({
 ticket.ticketNotice(req, res, function(result){
     console.log(result);
     return res.json({status:1, message:'receive success.'});
+});
+```
+
+### 消费通知接口(Express示例)
+```
+router.post('/notify', function(req, res, next){
+    var data = req.body;
+    // ticketNotice方法将对请求参数做校验
+    ticket.ticketNotice(data, function(err, result){
+        if(err) return res.json({code:0, message:err.message});
+        return res.json({code:1, message:"success"});
+    });
 });
 ```
 

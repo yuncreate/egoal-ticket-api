@@ -1,6 +1,6 @@
 {
   "name": "egoal-ticket-api",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "node api module for shenzhen egoal ticket system",
   "main": "index.js",
   "repository": {

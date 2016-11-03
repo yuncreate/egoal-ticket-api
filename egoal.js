@@ -104,7 +104,7 @@ Ticket.prototype.request = function(opt, callback){
  * 门票列表接口
  * Examples:
  * ```
- * ticket.orderCreate(callback);
+ * ticket.orderGetPdcId(callback);
  * ```
  * Callback:
  *
@@ -297,9 +297,7 @@ Ticket.prototype.orderCreate = function(opt, callback){
  *      threeOrderId: '第三方系统订单编号',
  *      orderId:      '易高系统订单编号',
  *      ticketCode:   '票号'
- *  }, function(err, result){
- *      console.log(err || result);
- *  })
+ *  }, callback)
  *  ```
  *  Callback:
  *
@@ -363,9 +361,7 @@ Ticket.prototype.orderCancel = function (opt, callback) {
  *      threeOrderId: '第三方系统订单编号',
  *      orderId:      '易高系统订单编号',
  *      ticketCode:   '票号'
- *  }, function(err, result){
- *      console.log(err || result);
- *  })
+ *  }, callback);
  *  ```
  *  Callback:
  *
@@ -434,9 +430,7 @@ Ticket.prototype.orderGetInfo = function (opt, callback) {
  *  消费通知接口
  *  Example
  *  ```
- *  ticket.ticketNotice(req.body, function(err, result){
- *      console.log(err || result);
- *  });
+ *  ticket.ticketNotice(req.body, callback);
  *  ```
  *  Callback:
  *
