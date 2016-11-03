@@ -55,16 +55,16 @@ function Ticket(opt){
     }
 
     // verify uname（检测账号）
-    if(!opt.hasOwnProperty('uname') || trim(opt.uname) == ""){
+    if(opt.name == undefined || trim(opt.uname) == ""){
         throw new Error('uname required.');
     }
 
     // verify pass（检测密码）
-    if(!opt.hasOwnProperty('pass') || trim(opt.pass) == ""){
+    if(opt.pass == undefined || trim(opt.pass) == ""){
         throw new Error('pass required.');
     }
 
-    if(!opt.hasOwnProperty('url') || trim(opt.url) == ""){
+    if(opt.url == undefined || trim(opt.url) == ""){
         throw new Error('api url required.');
     }
 
@@ -210,39 +210,39 @@ Ticket.prototype.orderCreate = function(opt, callback){
         return opt(new Error('booking options object required.'));
     }
 
-    if(!opt.hasOwnProperty('threeOrderId') || trim(opt.threeOrderId) == ""){
+    if(opt.threeOrderId == undefined || trim(opt.threeOrderId) == ""){
         return callback(new Error('options.threeOrderId required.'));
     }
 
-    if(!opt.hasOwnProperty('playDate') || trim(opt.playDate) == ""){
+    if(opt.playDate == undefined || trim(opt.playDate) == ""){
         return callback(new Error('options.playDate required.'));
     }
 
-    if(!opt.hasOwnProperty('mobile') || trim(opt.mobile) == ""){
+    if(opt.mobile == undefined || trim(opt.mobile) == ""){
         return callback(new Error('options.mobile required.'));
     }
 
-    if(!opt.hasOwnProperty('pdcId') || trim(opt.pdcId) == ""){
+    if(opt.pdcId == undefined || trim(opt.pdcId) == ""){
         return callback(new Error('options.pdcId required.'));
     }
 
-    if(!opt.hasOwnProperty('pdcPrice') || trim(opt.pdcPrice) == ""){
+    if(opt.pdcPrice == undefined || trim(opt.pdcPrice) == ""){
         return callback(new Error('options.pdcPrice required.'));
     }
 
-    if(!opt.hasOwnProperty('pCount') || trim(opt.pCount) == ""){
+    if(opt.pCount == undefined || trim(opt.pCount) == ""){
         return callback(new Error('options.pCount required.'));
     }
 
-    if(!opt.hasOwnProperty('checkNum') || trim(opt.checkNum) == ""){
+    if(opt.checkNum == undefined || trim(opt.checkNum) == ""){
         return callback(new Error('options.checkNum required.'));
     }
 
-    if(!opt.hasOwnProperty('money') || trim(opt.money) == ""){
+    if(opt.money == undefined || trim(opt.money) == ""){
         return callback(new Error('options.money required.'));
     }
 
-    if(!opt.hasOwnProperty('localPay') || trim(opt.localPay) == ""){
+    if(opt.localPay == undefined || trim(opt.localPay) == ""){
         return callback(new Error('options.localPay required.'));
     }
 
@@ -252,6 +252,7 @@ Ticket.prototype.orderCreate = function(opt, callback){
         pdcId           = opt.pdcId,
         pdcPrice        = opt.pdcPrice,
         pCount          = opt.pCount,
+        checkNum        = opt.checkNum,
         certNo          = opt.certNo ? opt.certNo: "",
         money           = opt.money;
 
@@ -272,14 +273,16 @@ Ticket.prototype.orderCreate = function(opt, callback){
     // 匹配问题
 
     var args = {
-        method: 'order_create',
-        uname:  this.uname,
+        method:       'order_create',
+        uname:        this.uname,
+        mobile:       mobile,
         threeOrderId: threeOrderId,
         playDate:     playDate,
         pdcId:        pdcId,
         pdcPrice:     pdcPrice,
         pCount:       pCount,
         certNo:       certNo,
+        checkNum:     checkNum,
         money:        money
     };
     args.sign = this.signature(args);
@@ -328,15 +331,15 @@ Ticket.prototype.orderCancel = function (opt, callback) {
         throw new Error('Params Invalid.');
     }
 
-    if(!opt.hasOwnProperty('orderId') || trim(opt.orderId) == ""){
+    if(opt.orderId == undefined || trim(opt.orderId) == ""){
         return callback(new Error('orderId required'));
     }
 
-    if(!opt.hasOwnProperty('threeOrderId') || trim(opt.threeOrderId) == ""){
+    if(opt.threeOrderId == undefined || trim(opt.threeOrderId) == ""){
         return callback(new Error('threeOrderId required'));
     }
 
-    if(!opt.hasOwnProperty('ticketCode') || trim(opt.ticketCode) == ""){
+    if(opt.ticketCode == undefined || trim(opt.ticketCode) == ""){
         return callback(new Error('ticketCode required'));
     }
 
@@ -388,23 +391,31 @@ Ticket.prototype.orderCancel = function (opt, callback) {
  * }
  * ```
  *  @name  orderGetInfo              (获取订单状态)
- *  @param {String}   threeOrderId   (第三方系统订单编号)
+ *  @param {String|Object}   opt   (第三方系统订单编号)
  *  @param {Function} callback       (回调函数)
  *
  */
-Ticket.prototype.orderGetInfo = function (threeOrderId, callback) {
-    if(typeof threeOrderId == 'function'){
+Ticket.prototype.orderGetInfo = function (opt, callback) {
+    if(typeof opt == 'function'){
         //threeOrderId = threeOrderId.threeOrderId;
-        return threeOrderId(new Error('threeOrderId param required.'));
+        return opt(new Error('threeOrderId param required.'));
     }
 
-    if(typeof threeOrderId == 'object'){
-        threeOrderId = threeOrderId.threeOrderId;
+    var threeOrderId ="";
+    var orderId = "";
+    var ticketCode = "";
+    if(typeof opt != 'object'){
+        threeOrderId = opt;
+    } else {
+         threeOrderId = opt.threeOrderId;
+         orderId = opt.orderId?opt.orderId:"";
+         ticketCode = opt.ticketCode?opt.orderId:"";
     }
 
-    if(!threeOrderId || trim(threeOrderId) == ""){
+    if(trim(threeOrderId) == ""){
         return callback(new Error('threeOrderId param required.'));
     }
+
     // 逻辑校验
     // 必须要有一个参数（字符串直接就是threeOrderId,如果是对象，则获取其中的threeOrderId)
     // 如果不符合条件就报错
@@ -412,8 +423,8 @@ Ticket.prototype.orderGetInfo = function (threeOrderId, callback) {
         method: 'order_getinfo',
         uname: this.uname,
         threeOrderId: threeOrderId,
-        orderId : threeOrderId.orderId?threeOrderId.orderId:'',
-        ticketCode : threeOrderId.ticketCode?threeOrderId.ticketCode:''
+        orderId : orderId,
+        ticketCode : ticketCode
     };
     args.sign = this.signature(args);
     this.request(args, callback);
@@ -423,7 +434,7 @@ Ticket.prototype.orderGetInfo = function (threeOrderId, callback) {
  *  消费通知接口
  *  Example
  *  ```
- *  ticket.ticketNotice(req, res, function(err, result){
+ *  ticket.ticketNotice(req.body, function(err, result){
  *      console.log(err || result);
  *  });
  *  ```
@@ -453,60 +464,52 @@ Ticket.prototype.orderGetInfo = function (threeOrderId, callback) {
  * }
  * ```
  *  @name  ticketNotice          (消费通知接口)
- *  @param req      {Object}     (request对象)
- *  @param res      {Object}     (response对象)
- *  @param callback {Function}   (回调函数)
+ *  @param {Object} data         (收到的数据)
+ *  @param {Function} callback   (回调函数)
  */
-Ticket.prototype.ticketNotice = function (req, res, callback) {
+Ticket.prototype.ticketNotice = function (data, callback) {
     var self = this;
-    try{
-        var data = req.body;
-        if(!data.hasOwnProperty('method') || trim(data.method) == ""){
-            throw new Error('method param not provide.');
-            //return res.json({status:0, message:'method param not provide.'});
-        }
-
-        if(!data.hasOwnProperty('sign') || trim(data.sign) == ""){
-            throw new Error('sign param not provide');
-            //return res.json({status:0, message:'sign param not provide'});
-        }
-
-        if(!data.hasOwnProperty('uname') || trim(data.uname) == ""){
-            throw new Error('uname param not provide');
-            //return res.json({status:0, message:'uname param not provide'});
-        }
-
-        if(!data.hasOwnProperty('orderId') || trim(data.orderId) == ""){
-            throw new Error('orderId param not provide');
-            //return res.json({status:0, message:'orderId param not provide'});
-        }
-
-        if(!data.hasOwnProperty('threeOrderId') || trim(data.threeOrderId) == ""){
-            throw new Error('threeOrderId param not provide');
-            //return res.json({status:0, message:'threeOrderId param not provide'})
-        }
-
-        if(!data.hasOwnProperty('ticketCode') || trim(data.ticketCode) == ""){
-            throw new Error('ticketCode param not provide.');
-            //return res.json({status:0, message:''})
-        }
-    } catch (e){
-        return res.json({status:0,message:e.message});
+    if(typeof data == 'function' || typeof data != 'object'){
+        return callback(new Error('data required.'));
     }
 
-    var method = data.method;
-    var sign = data.sign;
-    var uname = data.uname;
-    var orderId = data.orderId;
+    if(data.method == undefined || trim(data.method) == ""){
+        return callback(new Error('method param not provide.'));
+    }
+
+    if(data.sign == undefined || trim(data.sign) == ""){
+        return callback(new Error('sign param not provide'));
+    }
+
+    if(data.uname == undefined || trim(data.uname) == ""){
+        return callback(new Error('uname param not provide'));
+    }
+
+    if(data.orderId == undefined || trim(data.orderId) == ""){
+        return callback(new Error('orderId param not provide'));
+    }
+
+    if(data.threeOrderId == undefined || trim(data.threeOrderId) == ""){
+        return callback(new Error('threeOrderId param not provide'));
+    }
+
+    if(data.ticketCode == undefined || trim(data.ticketCode) == ""){
+        return callback(new Error('ticketCode param not provide.'));
+    }
+
+    var method       = data.method;
+    var sign         = data.sign;
+    var uname        = data.uname;
+    var orderId      = data.orderId;
     var threeOrderId = data.threeOrderId;
-    var ticketCode = data.ticketCode;
+    var ticketCode   = data.ticketCode;
 
     if(method != 'order_check'){
-        return res.json({status:0, message:'method invalid'});
+        return callback(new Error('method invalid'));
     }
 
     if(uname != self.uname){
-        return res.json({status:0, message:'uname invalid'});
+        return callback(new Error('uname invalid.'));
     }
     var params = {
         method: method,
@@ -519,15 +522,15 @@ Ticket.prototype.ticketNotice = function (req, res, callback) {
     try{
         var check = self.signature(params);
     } catch (e){
-        return res.json({status:0, message:'sign error'});
+        return callback(new Error('sign error'));
     }
 
     if(check != sign){
-        return res.json({status:0, message:'sign invalid'});
+        return callback(new Error('sign invalid'));
     }
 
     // 验证通过
-    return callback({
+    return callback(null, {
         orderId: orderId,
         threeOrderId:threeOrderId,
         ticketCode:ticketCode
@@ -535,3 +538,4 @@ Ticket.prototype.ticketNotice = function (req, res, callback) {
 };
 
 module.exports = Ticket;
+
