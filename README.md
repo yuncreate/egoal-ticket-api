@@ -95,7 +95,7 @@ ticket.ticketNotice(req, res, function(result){
 ```
 
 ### 消费通知接口(Express示例)
-```
+```js
 router.post('/notify', function(req, res, next){
     var data = req.body;
     // ticketNotice方法将对请求参数做校验
